@@ -8,23 +8,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'auth1/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'mainprogram/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'mainprogram/css/sidebar.css' %}">
 </head>
 <body>
-    <aside>
-        <img src="{% static 'auth1/img/logo.jpg' %}" alt="Логотип">
-        <span class="logo"></span>
-        <h3>Панель</h3>
-        <ul>
-            <a href="{% url 'home' %}"><li>Главная</li></a>
-            <a href="{% url 'auth' %}"><li>Регистрация</li></a>
-            <a href="{% url 'profile' %}"><li>Профиль</li></a>
-            <a href="{% url 'logout' %}"><li>Выход</li></a>
-        </ul>
-    </aside>
+    {% include 'mainprogram/includes/sidebar.html' %}
     <main>
         {% block body %}
         {% endblock %}
-    </main>>
+    </main>
 </body>
 </html>

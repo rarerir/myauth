@@ -1,8 +1,8 @@
-{% extends 'auth1/layout.html' %}
+{% extends 'mainprogram/layout.html' %}
 
 {% block title %}Профиль{% endblock %}
 
 {% block body %}
-    <h1>Профиль {{ nickname }}</h1>
+    <h1>Профиль {{ user.username }}</h1>
     <p>Профиль</p>
 {% endblock %}
