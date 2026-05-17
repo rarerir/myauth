@@ -15,15 +15,11 @@
     {% endif %}
 
     <form method="post" action="{% url 'login' %}">
-        <div class="mb-3">
-            <label for="id_username" class="form-label">Имя пользователя:</label>
-            <input type="text" name="username" id="id_username" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="id_password" class="form-label">Пароль:</label>
-            <input type="password" name="password" id="id_password" class="form-control" required>
-        </div>
-        <input type="hidden" name="next" value="{{ next }}">
+        {% csrf_token %}
+        {{ form.email }}<br>
+        {{ form.password }}<br>
+        <span>{{ error }}</span>
+        <span>{{ form.non_field_errors }}</span>
         <button type="submit" class="btn btn-primary">Войти</button>
     </form>
 

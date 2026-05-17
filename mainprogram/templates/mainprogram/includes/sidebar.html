@@ -7,7 +7,7 @@
         {% if user.is_authenticated %}
             <a href="{% url 'home' %}"><li>Главная</li></a>
             <a href="{% url 'profile' %}"><li>Профиль</li></a>
-            <a href="{% url 'profile/logout' %}"><li>Выход</li></a>
+            <a href="{% url 'logout' %}"><li>Выход</li></a>
         {% else %}
             <a href="{% url 'home' %}"><li>Главная</li></a>
             <a href="{% url 'login' %}"><li>Войти</li></a>
