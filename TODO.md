@@ -6,6 +6,10 @@
 - [x] API ViewSet: `/api/users/`, `/api/roles/`
 - [x] Тестовые пользователи (`python manage.py seed_users`)
 - [x] Заглушки HTML (login, register, profile)
+- [x] Убрать пароль из `UserSerializer` в ответе API (`write_only`)
+- [x] `set_password()` / `check_password()` через **bcrypt** (не хранить plaintext)
+- [x] Модель **Session** (`user`, `token_id`)
+- [x] Связать `User.role` с `Role` (FK или согласованные коды G/U/A)
 
 ---
 
@@ -13,12 +17,7 @@
 
 ### Модели и пароли
 
-- [ ] Убрать пароль из `UserSerializer` в ответе API (`write_only` или не отдавать)
-- [ ] `set_password()` / `check_password()` через **bcrypt** (не хранить plaintext)
-- [ ] Модель **UserSession** (`user`, `token_id`, `expires_at`)
-- [ ] Привести **Role** в порядок (сейчас `shirt_size` — заменить на нормальное поле, например `code` / `name`)
-- [ ] Связать `User.role` с `Role` (FK или согласованные коды G/U/A)
-- [ ] Миграции + проверка в shell
+- [x] Миграции + проверка в shell
 
 ### Login / logout / register
 
