@@ -10,22 +10,7 @@
 - [x] `set_password()` / `check_password()` через **bcrypt** (не хранить plaintext)
 - [x] Модель **Session** (`user`, `token_id`)
 - [x] Связать `User.role` с `Role` (FK или согласованные коды G/U/A)
-
----
-
-## День 1 — Аутентификация
-
-### Модели и пароли
-
-- [x] Миграции + проверка в shell
-
-### Login / logout / register
-
-- [ ] `POST /api/auth/register/` — email, пароль×2, ФИО
-- [ ] `POST /api/auth/login/` — email + пароль → JWT + cookie `sessionid`
-- [ ] `POST /api/auth/logout/` — удалить сессию в БД
-- [ ] **Middleware**: `Authorization: Bearer` / cookie → `request.user`
-- [ ] **DRF** `CustomTokenAuthentication` (чтобы DRF не затирал user)
+- [?] **DRF** `CustomTokenAuthentication` (чтобы DRF не затирал user)
 
 ### Профиль
 
