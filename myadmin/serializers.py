@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Role, User
+from api.models import Role, User
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -12,7 +12,7 @@ class RoleSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'name', 'surname', 'patronymic', 'is_active', 'role')
+        fields = ('id', 'email', 'password_hash', 'name', 'surname', 'patronymic', 'is_active', 'role')
         extra_kwargs = {
             'password': {'write_only': True}
         }

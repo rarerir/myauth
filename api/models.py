@@ -18,7 +18,7 @@ class User(models.Model):
     surname = models.CharField('Фамилия', max_length=60, null=True, blank=True)
     patronymic = models.CharField('Отчество', max_length=60, null=True, blank=True)
     is_active = models.BooleanField('Активен', default=True)
-    role = models.ForeignKey('role', null=False, default=1, on_delete=models.SET_DEFAULT)
+    role = models.ForeignKey(Role, null=False, default=2, on_delete=models.SET_DEFAULT)
 
     def encode(self):
         pass
@@ -47,5 +47,5 @@ class User(models.Model):
 # кастомном Middleware в Django.
 # VALUES ('a', true, true, true, true, true);
 # VALUES ('m', true, true, true, false, false);
-# VALUES ('u', true, true, false, false, false);
-# VALUES ('g', true, false, false, false, false);
+# VALUES ('u', false, true, false, false, false);
+# VALUES ('g', false, false, false, false, false);

@@ -14,9 +14,9 @@ class AuthenticationMiddleware:
             if user is not None:
                 request.user = user
         else:
-            session_id = request.COOKIES.get('access_token')
-            if session_id:
-                user = get_user_from_token(session_id)
+            token = request.COOKIES.get('access_token')
+            if token:
+                user = get_user_from_token(token)
                 if user is not None:
                     request.user = user
         return self.get_response(request)

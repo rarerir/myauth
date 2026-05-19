@@ -1,37 +1,12 @@
 from django.forms import model_to_dict
 from django.http import JsonResponse
-from rest_framework import viewsets
 import json
 
+from rest_framework.views import APIView
+
+from myauth.permissions import RoleBasedPermission
 from .auth_utils import create_login_cookie, create_jwt_token
-from .models import Role, User
-from .serializers import RoleSerializer, UserSerializer
-
-
-class RolesApi(viewsets.ModelViewSet):
-    queryset = Role.objects.all()
-    serializer_class = RoleSerializer
-    http_method_names = ['get']
-
-
-class UsersApi(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-def admin_roles(request) -> JsonResponse:
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Метод запрещён'}, status=405)
-    user = request.user
-    try:
-        data = json.loads(request.body.decode('utf-8'))
-    except json.JSONDecodeError:
-        return JsonResponse({'error': 'Invalid JSON'}, status=400)
-
-    # if user.role.postroles:
-
-
-
-    return JsonResponse({'error': 'Метод запрещён'}, status=405)
+from .models import User
 
 
 def register(request) -> JsonResponse:
@@ -52,7 +27,6 @@ def register(request) -> JsonResponse:
         return JsonResponse({'message': 'Такая почта уже существует'})
     user = User(email=email)
     user.set_password(password1)
-    user.role = Role.objects.get(id=2)
     user.save()
     return JsonResponse({'message': f'Пользователь {user.email} зарегистрирован'})
 
@@ -63,7 +37,6 @@ def login(request) -> JsonResponse:
         data = json.loads(request.body.decode('utf-8'))
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
-
     email = data.get('email')
     password = data.get('password')
     user = User.objects.get(email=email)
@@ -72,27 +45,36 @@ def login(request) -> JsonResponse:
     else:
         return create_login_cookie(create_jwt_token(user))
 
-def profile(request):
-    user = request.user
-    if request.method == 'POST' and user.role.postself:
-        try:
-            if not user.role.postself:
-                return JsonResponse({'error': 'У вас нет прав на редактирование профиля'}, status=403)
-        except Role.DoesNotExist:
-            return JsonResponse({'error': 'Роль пользователя не найдена'}, status=403)
+def logout(request) -> JsonResponse:
+    response = JsonResponse({'message': 'Выход успешен'})
+    response.delete_cookie('access_token')
+    return response
 
+
+class ProfileAPIView(APIView):
+    basename = 'user'
+    permission_classes = [RoleBasedPermission]
+
+    def get(self, request) -> JsonResponse:
+        user = request.user
+        data = model_to_dict(user, fields=['email', 'name', 'surname', 'patronymic', 'role'])
+        return JsonResponse(data)
+
+    def post(self, request) -> JsonResponse:
+        user = request.user
+        if not user.role.postself:
+            return JsonResponse({'error': 'Нет прав на редактирование профиля'}, status=403)
         try:
             data = json.loads(request.body.decode('utf-8'))
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
-
         email = data.get('email')
         password = data.get('password')
         name = data.get('name')
         surname = data.get('surname')
-        patronimic = data.get('patronimic')
+        patronymic = data.get('patronymic')
 
-        if not any([email, password, name, surname, patronimic]):
+        if not any([email, password, name, surname, patronymic]):
             return JsonResponse({'error': 'Нет данных для обновления'}, status=400)
 
         if email and email.strip():
@@ -106,21 +88,15 @@ def profile(request):
             user.name = name.strip()
         if surname and surname.strip():
             user.surname = surname.strip()
-        if patronimic and patronimic.strip():
-            user.patronimic = patronimic.strip()
-
+        if patronymic and patronymic.strip():
+            user.patronymic = patronymic.strip()
         user.save()
         return JsonResponse({'message': 'Профиль успешно обновлён'}, status=200)
 
-    if request.method == 'DELETE' and user.role.postself:
+    def delete(self, request) -> JsonResponse:
+        user = request.user
+        if not user.role.postself:
+            return JsonResponse({'error': 'Нет прав на удаление аккаунта'}, status=403)
         user.is_active = False
         user.save()
-        return logout(request)
-    if request.method == 'GET' and user.role.get:
-        return JsonResponse(model_to_dict(user, fields=['email', 'name', 'surname', 'patronymic', 'role']))
-    return JsonResponse({'error': 'Метод запрещён или недостаточно прав'}, status=405)
-
-def logout(request):
-    response = JsonResponse({'message': 'Выход успешен'})
-    response.delete_cookie('access_token')
-    return response
+        return JsonResponse({'message': 'Аккаунт деактивирован'}, status=200)

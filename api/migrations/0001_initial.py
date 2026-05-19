@@ -4,8 +4,8 @@ import django.db.models.deletion
 def seed_default_roles(apps, schema_editor):
     Role = apps.get_model('api', 'Role')
     default_roles = [
-        ('g', True, False, False, False, False),
-        ('u', True, True, False, False, False),
+        ('g', False, False, False, False, False),
+        ('u', False, True, False, False, False),
         ('m', True, True, True, False, False),
         ('a', True, True, True, True, True),
     ]
@@ -25,11 +25,11 @@ def seed_default_roles(apps, schema_editor):
 def seed_default_users(apps, schema_editor):
     User = apps.get_model('api', 'User')
     users_data = [
-        ('admin@example.com', '1', '1', '1', 'hashed_pass', True, 4),
-        ('manager@example.com', '2', '2', '2', 'hashed_pass', True, 3),
-        ('user@example.com', '3', '3', '3', 'hashed_pass', True, 2),
-        ('guest@example.com', '4', '4', '', 'null', True, 1),
-    ]
+        ('admin@example.com', '4', '4', '4', '$2b$12$8MU9uke0Rrld5VtIwocBRuX/cuFHTlQKsHbaHHvTmvdxnR.3aF7jS', True, 4),
+        ('manager@example.com', '3', '3', '3', '$2b$12$8MU9uke0Rrld5VtIwocBRuX/cuFHTlQKsHbaHHvTmvdxnR.3aF7jS', True, 3),
+        ('user@example.com', '2', '2', '2', '$2b$12$8MU9uke0Rrld5VtIwocBRuX/cuFHTlQKsHbaHHvTmvdxnR.3aF7jS', True, 2),
+        ('guest@example.com', '1', '1', '1', None, True, 1),
+    ] # $2b$12$8MU9uke0Rrld5VtIwocBRuX/cuFHTlQKsHbaHHvTmvdxnR.3aF7jS - 11111111
     for email, name, surname, patronymic, pwd_hash, is_active, role in users_data:
         User.objects.update_or_create(
             email=email,
@@ -39,7 +39,7 @@ def seed_default_users(apps, schema_editor):
                 'patronymic': patronymic,
                 'password_hash': pwd_hash,
                 'is_active': is_active,
-                'role': role,
+                'role_id': role,
             }
         )
 

@@ -19,4 +19,3 @@ class Database:
 
     def check(self) -> bool:
         return True
-
