@@ -5,16 +5,15 @@ from api import views
 from api.views import RolesApi, UsersApi
 
 router = routers.DefaultRouter()
-router.register('roles', RolesApi, basename='role')
-router.register('users', UsersApi, basename='user')
+router.register('admin/roles', RolesApi, basename='role')
+router.register('admin/users', UsersApi, basename='user')
 
 urlpatterns = [
+    path('', include(router.urls)),
+    path('admin/', views.admin),
     path('register/', views.register),
     path('login/', views.login),
     path('profile/', views.profile),
-    path('profile/logout', views.logout)
-]
+    path('profile/logout/', views.logout)
 
-urlpatterns = [
-    path('', include(router.urls))
 ]

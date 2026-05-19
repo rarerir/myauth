@@ -1,5 +1,5 @@
 from .models import User
-from auth_utils import get_user_from_token
+from .auth_utils import get_user_from_token
 
 class AuthenticationMiddleware:
     def __init__(self, get_response):
@@ -14,10 +14,9 @@ class AuthenticationMiddleware:
             if user is not None:
                 request.user = user
         else:
-            session_id = request.COOKIES.get('sessionid')
+            session_id = request.COOKIES.get('access_token')
             if session_id:
                 user = get_user_from_token(session_id)
                 if user is not None:
                     request.user = user
-
         return self.get_response(request)
