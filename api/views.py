@@ -4,7 +4,7 @@ import json
 
 from rest_framework.views import APIView
 
-from myauth.permissions import RoleBasedPermission
+from main.permissions import RoleBasedPermission
 from .auth_utils import create_login_cookie, create_jwt_token
 from .models import User
 

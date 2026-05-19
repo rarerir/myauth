@@ -40,11 +40,6 @@ class User(models.Model):
     def hash_password(password: str) -> str:
         hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         return hashed.decode('utf-8')
-# Можно определять пользователя из header Authorization : Bearer {user_token},
-# либо после логина создавать сессию (доп таблица sessions, и в response
-# устанавливать пользователю Cookie с sessionid, expire_at …
-# В request сразу присваивать request.user перед обработкой запроса в
-# кастомном Middleware в Django.
 # VALUES ('a', true, true, true, true, true);
 # VALUES ('m', true, true, true, false, false);
 # VALUES ('u', false, true, false, false, false);

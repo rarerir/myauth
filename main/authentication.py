@@ -1,8 +1,10 @@
 from rest_framework import authentication
 from api.auth_utils import get_user_from_token
+from api.models import User
 
 class Authentication(authentication.BaseAuthentication):
     def authenticate(self, request):
+        user = User.guest()
         auth_header = request.META.get('HTTP_AUTHORIZATION', '')
         if auth_header.startswith('Bearer '):
             token = auth_header[7:].strip()

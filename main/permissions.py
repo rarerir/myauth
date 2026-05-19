@@ -4,7 +4,7 @@ class RoleBasedPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         resource = getattr(view, 'basename', None)
 
-        if resource not in ['user', 'role']:
+        if resource not in ['user', 'role', 'product', 'order']:
             return False
 
         user = request.user
@@ -12,6 +12,7 @@ class RoleBasedPermission(permissions.BasePermission):
 
         method = request.method
         if method == 'GET':
+            # Мне лень делать отдельные поля в ролях под псевдобизнес
             return role.get
 
         if method == 'POST':
@@ -19,10 +20,19 @@ class RoleBasedPermission(permissions.BasePermission):
                 return role.postusers
             elif resource == 'role':
                 return role.postroles
+            # Мне лень делать отдельные поля в ролях под псевдобизнес
+            elif resource == 'product':
+                return role.postusers
+            elif resource == 'order':
+                return role.postroles
 
         if method == 'DELETE':
             if resource == 'user':
                 return role.delete
             elif resource == 'role':
-                return role.postroles
+                return role.delete
+            elif resource == 'product':
+                return role.delete
+            elif resource == 'order':
+                return role.delete
         return True

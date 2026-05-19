@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
-from myauth.settings import SECRET_KEY, JWT_TOKEN_EXPIRES
+from main.settings import SECRET_KEY, JWT_TOKEN_EXPIRES
 from datetime import datetime, timezone
 from .models import User
 

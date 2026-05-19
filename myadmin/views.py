@@ -2,7 +2,7 @@ from rest_framework import viewsets
 
 from api.models import Role, User
 from myadmin.serializers import RoleSerializer, UserSerializer
-from myauth.permissions import RoleBasedPermission
+from main.permissions import RoleBasedPermission
 
 class RolesApi(viewsets.ModelViewSet):
     queryset = Role.objects.all()
